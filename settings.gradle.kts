@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "WanAndroidMulti"
 include(":app")
 include(":lib_base")
+include(":module_login")

@@ -1,18 +1,19 @@
 plugins {
-    alias(libs.plugins.android.application)
+    //alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.android.library")
 }
 
 android {
-    namespace = "com.generals.wanandroidmulti"
+    namespace = "com.generals.module.login"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.generals.wanandroidmulti"
+        //applicationId = "com.generals.module.login"
         minSdk = 30
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        //versionCode = 1
+        //versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -47,5 +48,4 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(project(":lib_base"))
-    implementation(project(":module_login"))
 }
