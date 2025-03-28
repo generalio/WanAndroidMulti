@@ -47,5 +47,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    implementation(libs.bundles.projectBase)
+
     implementation(project(":lib_base"))
 }

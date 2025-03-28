@@ -12,7 +12,7 @@ import retrofit2.create
  */
 object ServiceCreator {
 
-    private val BASE_URL = "https://www.wanandroid.com"
+    private val BASE_URL = "https://www.wanandroid.com/"
 
     val client = OkHttpClient.Builder()
         .cookieJar(CookieRemember(BaseApp.context))

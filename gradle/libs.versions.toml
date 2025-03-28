@@ -12,7 +12,7 @@ constraintlayout = "2.2.1"
 
 flexbox = "3.0.0"
 glide = "4.16.0"
-retrofit = "2.11.0"
+retrofit = "2.9.0"
 rxjava = "3.0.0"
 android-activity-ktx = "1.10.1"
 lifecycle = "2.8.7"
@@ -48,3 +48,16 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 
+[bundles]
+projectBase = [
+    "retrofit",
+    "retrofit-adapter-rxjava",
+    "retrofit-converter-gson",
+    "rxjava",
+    "rxjava-android",
+    "android-activity-ktx",
+    "android-lifecycle-viewmodel-ktx",
+    "android-lifecycle-livedata-ktx",
+    "arouter-api",
+    "arouter-compiler"
+]

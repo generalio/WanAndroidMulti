@@ -79,25 +79,27 @@
                 android:textSize="15sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_login_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="登录"
             android:textSize="15dp"
+            app:cornerRadius="5dp"
             app:layout_constraintEnd_toEndOf="@+id/til_login_password"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/til_login_password" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_login_sign"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="前往注册"
             android:textSize="15dp"
+            app:cornerRadius="5dp"
             app:layout_constraintEnd_toEndOf="@+id/btn_login_login"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/btn_login_login"
