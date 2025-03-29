@@ -23,6 +23,7 @@
         </activity>
 
         <activity android:name="com.generals.module.login.LoginActivity"
+            android:theme="@style/Theme.WanAndroidMulti"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -5,6 +5,10 @@ package com.generals.module.login.model.bean
  * date : 2025/3/28 09:49
  */
 class PostBody() {
-    data class LoginBody(val username: String, val password: String)
-    data class SignBody(val username: String, val password: String, val repassword: String)
 }
+
+data class LoginBody(
+    val username: String,
+    val password: String
+)
+data class SignBody(val username: String, val password: String, val repassword: String)

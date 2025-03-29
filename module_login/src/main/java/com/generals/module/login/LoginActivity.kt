@@ -1,6 +1,7 @@
 package com.generals.module.login
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.CheckBox
@@ -30,6 +31,7 @@ class LoginActivity : BaseActivity() {
         setContentView(R.layout.activity_login)
 
         initView()
+        initInfo()
         initEvent()
     }
 
@@ -65,12 +67,12 @@ class LoginActivity : BaseActivity() {
                 if (mEtPassword.text.toString() == "") {
                     mTilPassword.setError("密码不能为空")
                 } else {
+                    val username = mEtAccount.text.toString()
+                    val password = mEtPassword.text.toString()
                     if (mCbRemember.isChecked) {
-                        val username = mEtAccount.text.toString()
-                        val password = mEtPassword.text.toString()
                         viewmodel.passwordRemember(username, password)
                     }
-                    viewmodel.login(mEtAccount.text.toString(), mEtPassword.text.toString())
+                    viewmodel.login(username, password)
                 }
             }
         }
@@ -82,6 +84,19 @@ class LoginActivity : BaseActivity() {
         }
 
         // TODO : LoginLiveData && SignLiveData
+
+        viewmodel.livedataLogin.observe(this) {result ->
+            if(result != null) {
+                if(result.errorCode == -1) {
+                    /*result.errorMsg.showDialog("登录失败!") {
+                        clearInput()
+                    }*/
+                    result.errorMsg.showToast()
+                } else {
+                    "登录成功".showToast()
+                }
+            }
+        }
 
     }
 
@@ -102,7 +117,7 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun sign() {
-        val signView = LayoutInflater.from(this).inflate(R.layout.sign_layout, null)
+        val signView = LayoutInflater.from(this).inflate(R.layout.sign_layout, null)!!
         val dialog = CustomDialog()
             .newInstance()
             .setDialogHeight(1000)

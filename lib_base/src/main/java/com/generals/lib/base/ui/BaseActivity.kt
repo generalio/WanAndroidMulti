@@ -1,9 +1,13 @@
 package com.generals.lib.base.ui
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import com.generals.lib.base.BaseApp
 
 /**
  * description ： Activity的基类
@@ -44,6 +48,28 @@ abstract class BaseActivity : AppCompatActivity() {
         // 如果你要白色的状态栏字体，请在你直接的 Activity 中单独设置 isAppearanceLightStatusBars，这里不提供方法
         //windowInsetsController.isAppearanceLightStatusBars = isDaytimeMode()
         window.statusBarColor = Color.TRANSPARENT //把状态栏颜色设置成透明
+    }
+
+    val context: Context = BaseApp.context
+
+    //设置Toast
+    fun String.showToast() {
+        Toast.makeText(context, this, Toast.LENGTH_SHORT).show()
+    }
+
+    fun Int.showToast() {
+        Toast.makeText(context, this, Toast.LENGTH_SHORT).show()
+    }
+
+    //设置dialog
+    inline fun String.showDialog(title: String, crossinline block: () -> Unit) {
+        AlertDialog.Builder(context).apply {
+            setTitle(title)
+            setMessage(this@showDialog)
+            setCancelable(false)
+            setPositiveButton("确认") { _, which -> block() }
+            show()
+        }
     }
 
 }

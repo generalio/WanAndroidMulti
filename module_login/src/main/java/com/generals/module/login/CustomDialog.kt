@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.ImageView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -49,15 +50,21 @@ class CustomDialog : BottomSheetDialogFragment() {
         val behavior = BottomSheetBehavior.from(view)
 
         //设置弹出高度
-        behavior.peekHeight = height
-        view.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT //设置dialog高度
-        behavior.isHideable = false
+        behavior.peekHeight = height //设置第一次下划到达的高度
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED //默认为展开状态
+        //behavior.peekHeight = resources.displayMetrics.heightPixels -> 不能手动下划
+        view.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT - 500 //设置dialog高度
+        //behavior.isHideable = false 是否能被隐藏
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         customView?.let {
             dialog.setContentView(it)
+            val mIvClose : ImageView = customView!!.findViewById(R.id.iv_sign_close)
+            mIvClose.setOnClickListener {
+                dismiss()
+            }
         }
         return dialog
     }

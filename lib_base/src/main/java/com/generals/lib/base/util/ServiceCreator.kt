@@ -3,6 +3,7 @@ package com.generals.lib.base.util
 import com.generals.lib.base.BaseApp
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 
@@ -12,7 +13,7 @@ import retrofit2.create
  */
 object ServiceCreator {
 
-    private val BASE_URL = "https://www.wanandroid.com/"
+    private val BASE_URL = "https://www.wanandroid.com"
 
     val client = OkHttpClient.Builder()
         .cookieJar(CookieRemember(BaseApp.context))
@@ -22,6 +23,7 @@ object ServiceCreator {
         .baseUrl(BASE_URL)
         .client(client)
         .addConverterFactory(GsonConverterFactory.create())
+        .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
         .build()
 
     inline fun <reified T> create() : T = retrofit.create(T::class.java)
