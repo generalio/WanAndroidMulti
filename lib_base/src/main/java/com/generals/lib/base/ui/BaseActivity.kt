@@ -50,7 +50,7 @@ abstract class BaseActivity : AppCompatActivity() {
         window.statusBarColor = Color.TRANSPARENT //把状态栏颜色设置成透明
     }
 
-    val context: Context = BaseApp.context
+    val context: Context = this
 
     //设置Toast
     fun String.showToast() {
@@ -62,7 +62,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     //设置dialog
-    inline fun String.showDialog(title: String, crossinline block: () -> Unit) {
+    fun String.showDialog(title: String, block: () -> Unit) {
         AlertDialog.Builder(context).apply {
             setTitle(title)
             setMessage(this@showDialog)

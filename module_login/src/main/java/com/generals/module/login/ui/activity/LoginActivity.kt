@@ -1,8 +1,9 @@
-package com.generals.module.login
+package com.generals.module.login.ui.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
@@ -11,6 +12,8 @@ import androidx.activity.viewModels
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.FragmentTransaction
 import com.generals.lib.base.ui.BaseActivity
+import com.generals.module.login.CustomDialog
+import com.generals.module.login.R
 import com.generals.module.login.viewmodel.LoginViewModel
 import com.google.android.material.textfield.TextInputLayout
 
@@ -23,6 +26,11 @@ class LoginActivity : BaseActivity() {
     lateinit var mBtnSign: Button
     lateinit var mCbRemember: CheckBox
     lateinit var mIvClose: ImageView
+
+    lateinit var signView: View
+    lateinit var mEtSignUsername: EditText
+    lateinit var mEtSignPassword: EditText
+    lateinit var mEtSignRePassword: EditText
 
     val viewmodel : LoginViewModel by viewModels()
 
@@ -83,17 +91,33 @@ class LoginActivity : BaseActivity() {
             finish()
         }
 
-        // TODO : LoginLiveData && SignLiveData
-
         viewmodel.livedataLogin.observe(this) {result ->
             if(result != null) {
                 if(result.errorCode == -1) {
-                    /*result.errorMsg.showDialog("登录失败!") {
+                    result.errorMsg.showDialog("登录失败!") {
                         clearInput()
-                    }*/
-                    result.errorMsg.showToast()
+                    }
                 } else {
                     "登录成功".showToast()
+                    //TODO : 登录成功逻辑 -> 传递数据
+                }
+            }
+        }
+
+        viewmodel.livedataSign.observe(this) { result ->
+            if(result != null) {
+                if(result.errorCode == -1) {
+                    result.errorMsg.showDialog("注册失败") {
+                        mEtSignUsername.setText("")
+                        mEtSignPassword.setText("")
+                        mEtSignRePassword.setText("")
+                    }
+                } else {
+                    "注册成功,请返回登录!".showDialog("") {
+                        mEtAccount.setText(mEtSignUsername.text)
+                        mEtPassword.setText("")
+                        signView.visibility = View.GONE
+                    }
                 }
             }
         }
@@ -117,7 +141,7 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun sign() {
-        val signView = LayoutInflater.from(this).inflate(R.layout.sign_layout, null)!!
+        signView = LayoutInflater.from(this).inflate(R.layout.sign_layout, null)!!
         val dialog = CustomDialog()
             .newInstance()
             .setDialogHeight(1000)
@@ -126,6 +150,52 @@ class LoginActivity : BaseActivity() {
             supportFragmentManager.beginTransaction()
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE) //设置过渡动画
         dialog.show(ft, "DialogMore") //开启bottomSheetDialog
+
+        mEtSignUsername = signView.findViewById(R.id.et_sign_account)
+        mEtSignPassword = signView.findViewById(R.id.et_sign_password)
+        mEtSignRePassword = signView.findViewById(R.id.et_sign_rePassword)
+        val mTilUsername : TextInputLayout= signView.findViewById(R.id.til_sign_account)
+        val mTilPassword : TextInputLayout = signView.findViewById(R.id.til_sign_password)
+        val mTilRePassword : TextInputLayout = signView.findViewById(R.id.til_sign_rePassword)
+        val mBtnSign : Button= signView.findViewById(R.id.btn_sign_sign)
+
+        mIvClose.setOnClickListener {
+            finish()
+        }
+        mEtSignUsername.addTextChangedListener {
+            mTilUsername.isErrorEnabled = false
+        }
+        mEtSignPassword.addTextChangedListener {
+            mTilPassword.isErrorEnabled = false
+        }
+        mEtSignRePassword.addTextChangedListener {
+            mTilRePassword.isErrorEnabled = false
+        }
+        mBtnSign.setOnClickListener {
+            val username = mEtSignUsername.text.toString()
+            val password = mEtSignPassword.text.toString()
+            val rePassword = mEtSignRePassword.text.toString()
+            if (username == "") {
+                mTilUsername.setError("用户名不能为空!")
+            } else {
+                if (password == "") {
+                    mTilPassword.setError("密码不能为空!")
+                } else {
+                    if (rePassword == "") {
+                        mTilRePassword.setError("请再次输入密码!")
+                    } else {
+                        if (password != rePassword) {
+                            mTilRePassword.setError("两次密码输入不相同!")
+                        } else {
+                            viewmodel.sign(username, password, rePassword)
+                        }
+                    }
+                }
+            }
+        }
+
+
+
     }
 
 }

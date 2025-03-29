@@ -14,9 +14,11 @@ import retrofit2.create
 object ServiceCreator {
 
     private val BASE_URL = "https://www.wanandroid.com"
+    //private val loggingInterceptor = LoggingInterceptor() Okhttp拦截器
 
     val client = OkHttpClient.Builder()
         .cookieJar(CookieRemember(BaseApp.context))
+        //.addInterceptor(loggingInterceptor)
         .build()
 
     val retrofit = Retrofit.Builder()

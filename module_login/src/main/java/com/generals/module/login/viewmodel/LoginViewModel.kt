@@ -29,7 +29,6 @@ class LoginViewModel : ViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext { response ->
-                Log.d("zzx", response.toString())
                 _livedataLogin.postValue(response)
             }
             .doOnError { error ->

@@ -1,11 +1,10 @@
 package com.generals.module.login.model.network
 
-import com.generals.module.login.model.bean.LoginBody
 import com.generals.module.login.model.bean.PersonalInfo
-import com.generals.module.login.model.bean.SignBody
 import io.reactivex.rxjava3.core.Observable
 import retrofit2.http.Body
-import retrofit2.http.Headers
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 /**
@@ -14,10 +13,11 @@ import retrofit2.http.POST
  */
 interface LoginService {
 
-    @Headers("Content-Type: application/json")
+    @FormUrlEncoded
     @POST("/user/login")
-    fun login(@Body loginRequest: LoginBody): Observable<PersonalInfo>
+    fun login(@Field("username") username: String, @Field("password") password: String): Observable<PersonalInfo>
 
+    @FormUrlEncoded
     @POST("/user/register")
-    fun sign(@Body data: SignBody) : Observable<PersonalInfo>
+    fun sign(@Field("username") username: String, @Field("password") password: String, @Field("repassword") repassword: String) : Observable<PersonalInfo>
 }
