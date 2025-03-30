@@ -1,29 +1,40 @@
-package com.generals.module.main
+package com.generals.module.main.ui.activity
 
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
-import androidx.activity.result.ActivityResultLauncher
+import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
+import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.generals.lib.base.ui.BaseActivity
+import com.generals.module.main.NavigationFragment
+import com.generals.module.main.R
+import com.generals.module.main.ui.adapter.ViewPager2Adapter
+import com.generals.module.main.ui.fragment.HomeFragment
+import com.generals.module.main.ui.fragment.PublicFragment
+import com.generals.module.main.viewmodel.MainViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import java.util.ArrayList
 
 @Route(path = "/main/activity")
 class MainActivity : BaseActivity() {
+
+    val mainViewModel : MainViewModel by viewModels()
+
     lateinit var toggle: ActionBarDrawerToggle
-    lateinit var startForResult: ActivityResultLauncher<Intent>
     private var isLogin = false
 
     lateinit var mNavBottom: BottomNavigationView
@@ -31,18 +42,23 @@ class MainActivity : BaseActivity() {
     lateinit var drawerLayout: DrawerLayout
     lateinit var toolbar: Toolbar
 
+    companion object {
+        const val REQUEST_CODE_LOGIN = 100
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        ARouter.getInstance().inject(this)
-
-        //presenter = MainPresenter(this, MainModel(this))
 
         drawerLayout = findViewById(R.id.drawerlayout)
         toolbar = findViewById(R.id.toolbar)
 
         setNavigationColumn()
         setBottomNavigation()
+
+        mainViewModel.logoutLivedata.observe(this) {
+            showInfo("未登录", -1)
+        }
 
         // 注册 ActivityResultLauncher
         /*startForResult =
@@ -64,7 +80,7 @@ class MainActivity : BaseActivity() {
         setButton()
     }
 
-    /*override fun showInfo(username: String, coinCount: Int) {
+    fun showInfo(username: String, coinCount: Int) {
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         val headerView: View = navigationView.getHeaderView(0)
         val headerUsername: TextView = headerView.findViewById(R.id.tv_head_username)
@@ -85,7 +101,7 @@ class MainActivity : BaseActivity() {
                 headerCollectCoins.setText("积分:--")
             }
         }
-    }*/
+    }
 
     /*override fun showLogout() {
         isLogin = false
@@ -168,17 +184,14 @@ class MainActivity : BaseActivity() {
         val mBtnLogin: Button = headerView.findViewById(R.id.btn_head_login)
         mBtnLogin.setOnClickListener {
             if (mBtnLogin.text.toString() == "点击登录") {
-                ARouter.getInstance().build("/login/activity").navigation()
+                ARouter.getInstance().build("/login/activity").navigation(this, REQUEST_CODE_LOGIN)
             }
-            /*if (mBtnLogin.text.toString() == "退出登录") {
-                AlertDialog.Builder(this).apply {
-                    setMessage("确认退出登录？")
-                    setCancelable(true)
-                    setPositiveButton("确认") { dialog, which -> presenter.onLogout() }
-                    setNegativeButton("取消") { dialog, which -> }
-                    show()
+            if (mBtnLogin.text.toString() == "退出登录") {
+                "是否退出登录".showDialog("") {
+                    //TODO LOGOUT
+                    mainViewModel.logout()
                 }
-            }*/
+            }
         }
     }
 
@@ -192,10 +205,10 @@ class MainActivity : BaseActivity() {
         mNavBottom.itemIconTintList = null
         //将fragment添加进适配器
         val fragmentList: MutableList<Fragment> = ArrayList()
-        /*fragmentList.add(HomeFragment())
+        fragmentList.add(HomeFragment())
         fragmentList.add(PublicFragment())
         fragmentList.add(NavigationFragment())
-        mBottomViewpager2.adapter = ViewPager2Adapter(this, fragmentList)*/
+        mBottomViewpager2.adapter = ViewPager2Adapter(this, fragmentList)
 
         mBottomViewpager2.isUserInputEnabled = false
 
@@ -226,6 +239,17 @@ class MainActivity : BaseActivity() {
                 }
             }
             false
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == RESULT_OK && requestCode == REQUEST_CODE_LOGIN) {
+            val username = data?.getStringExtra("username")
+            val coinCount = data?.getIntExtra("coinCount", -1)
+            if(username != null && coinCount != null) {
+                showInfo(username, coinCount)
+            }
         }
     }
 

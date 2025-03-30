@@ -1,7 +1,9 @@
 package com.generals.module.login.ui.activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -103,8 +105,14 @@ class LoginActivity : BaseActivity() {
                     }
                 } else {
                     "登录成功".showToast()
-                    //TODO : 登录成功逻辑 -> 传递数据
-                    ARouter.getInstance().build("/main.activity").navigation()
+
+                    val resultIntent = Intent()
+                    resultIntent.putExtra("username", result.data.username)
+                    resultIntent.putExtra("coinCount", result.data.coinCount)
+                    setResult(RESULT_OK, resultIntent)
+
+                    finish()
+
                 }
             }
         }
