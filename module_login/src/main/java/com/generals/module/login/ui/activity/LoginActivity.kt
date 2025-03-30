@@ -11,12 +11,15 @@ import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.FragmentTransaction
+import com.alibaba.android.arouter.facade.annotation.Route
+import com.alibaba.android.arouter.launcher.ARouter
 import com.generals.lib.base.ui.BaseActivity
 import com.generals.module.login.CustomDialog
 import com.generals.module.login.R
 import com.generals.module.login.viewmodel.LoginViewModel
 import com.google.android.material.textfield.TextInputLayout
 
+@Route(path = "/login/activity")
 class LoginActivity : BaseActivity() {
     lateinit var mEtAccount: EditText
     lateinit var mEtPassword: EditText
@@ -37,6 +40,7 @@ class LoginActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        ARouter.getInstance().inject(this)
 
         initView()
         initInfo()
@@ -100,6 +104,7 @@ class LoginActivity : BaseActivity() {
                 } else {
                     "登录成功".showToast()
                     //TODO : 登录成功逻辑 -> 传递数据
+                    ARouter.getInstance().build("/main.activity").navigation()
                 }
             }
         }

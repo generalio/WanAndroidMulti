@@ -17,19 +17,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WanAndroidMulti"
         tools:targetApi="31">
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-        </activity>
 
         <activity android:name="com.generals.module.login.ui.activity.LoginActivity"
-            android:theme="@style/Theme.WanAndroidMulti"
             android:exported="true">
+
+
+
+        </activity>
+
+        <activity android:name="com.generals.module.main.MainActivity"
+            android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
     </application>
 

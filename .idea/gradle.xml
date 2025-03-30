@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/lib_base" />
             <option value="$PROJECT_DIR$/module_login" />
+            <option value="$PROJECT_DIR$/module_main" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

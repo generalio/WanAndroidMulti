@@ -48,4 +48,5 @@ dependencies {
 
     implementation(project(":lib_base"))
     implementation(project(":module_login"))
+    implementation(project(":module_main"))
 }

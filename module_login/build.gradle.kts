@@ -2,6 +2,13 @@ plugins {
     //alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.android.library")
+    kotlin("kapt")
+}
+
+kapt {
+    arguments {
+        arg("AROUTER_MODULE_NAME", project.name)
+    }
 }
 
 android {
@@ -48,6 +55,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(libs.bundles.projectBase)
+    kapt(libs.arouter.compiler)
 
     implementation(project(":lib_base"))
 }
