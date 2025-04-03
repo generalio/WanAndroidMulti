@@ -3,7 +3,6 @@ package com.generals.module.main.ui.activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -15,17 +14,17 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
-import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.generals.lib.base.ui.BaseActivity
-import com.generals.module.main.NavigationFragment
+import com.generals.module.main.ui.fragment.NavigationFragment
 import com.generals.module.main.R
 import com.generals.module.main.ui.adapter.ViewPager2Adapter
 import com.generals.module.main.ui.fragment.HomeFragment
 import com.generals.module.main.ui.fragment.PublicFragment
 import com.generals.module.main.viewmodel.MainViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import java.util.ArrayList
 
@@ -41,6 +40,7 @@ class MainActivity : BaseActivity() {
     lateinit var mBottomViewpager2: ViewPager2
     lateinit var drawerLayout: DrawerLayout
     lateinit var toolbar: Toolbar
+    lateinit var floatButton: FloatingActionButton
 
     companion object {
         const val REQUEST_CODE_LOGIN = 100
@@ -52,6 +52,7 @@ class MainActivity : BaseActivity() {
 
         drawerLayout = findViewById(R.id.drawerlayout)
         toolbar = findViewById(R.id.toolbar)
+        floatButton = findViewById(R.id.floatButton)
 
         setNavigationColumn()
         setBottomNavigation()
@@ -115,7 +116,7 @@ class MainActivity : BaseActivity() {
     //对toolbar+drawerlayout的基本设置
     private fun setNavigationColumn() {
 
-        toolbar.title = "玩Android"
+        toolbar.title = "首页"
         toolbar.setTitleTextColor(Color.WHITE)
         setSupportActionBar(toolbar)
         supportActionBar?.let {
@@ -164,6 +165,7 @@ class MainActivity : BaseActivity() {
             R.id.search -> {
                 /*val intent = Intent(this, SearchActivity::class.java)
                 startActivity(intent)*/
+                // TODO : 搜索界面跳转以及实现
                 true
             }
 
@@ -187,8 +189,7 @@ class MainActivity : BaseActivity() {
                 ARouter.getInstance().build("/login/activity").navigation(this, REQUEST_CODE_LOGIN)
             }
             if (mBtnLogin.text.toString() == "退出登录") {
-                "是否退出登录".showDialog("") {
-                    //TODO LOGOUT
+                "是否退出登录".showCancelDialog("") {
                     mainViewModel.logout()
                 }
             }
@@ -212,6 +213,21 @@ class MainActivity : BaseActivity() {
 
         mBottomViewpager2.isUserInputEnabled = false
 
+        floatButton.setOnClickListener {
+            val nowFragment = fragmentList[mBottomViewpager2.currentItem]
+            when (nowFragment) {
+                is HomeFragment -> {
+                    nowFragment.scrollToTop()
+                }
+                is PublicFragment -> {
+                    nowFragment.scrollToTop()
+                }
+                is NavigationFragment -> {
+                    nowFragment.scrollToTop()
+                }
+            }
+        }
+
         //fragment切换时底部导航跟着切换
         mBottomViewpager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -224,16 +240,19 @@ class MainActivity : BaseActivity() {
         mNavBottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.bottom_home -> {
+                    toolbar.title = "首页"
                     mBottomViewpager2.currentItem = 0
                     return@setOnItemSelectedListener true
                 }
 
                 R.id.bottom_public -> {
+                    toolbar.title = "公众号"
                     mBottomViewpager2.currentItem = 1
                     return@setOnItemSelectedListener true
                 }
 
                 R.id.bottom_navigation -> {
+                    toolbar.title = "导航"
                     mBottomViewpager2.currentItem = 2
                     return@setOnItemSelectedListener true
                 }

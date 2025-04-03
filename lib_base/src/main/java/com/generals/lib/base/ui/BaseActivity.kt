@@ -72,4 +72,14 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
+    fun String.showCancelDialog(title: String, block: () -> Unit) {
+        AlertDialog.Builder(context).apply {
+            setTitle(title)
+            setMessage(this@showCancelDialog)
+            setPositiveButton("确认") { _, which -> block() }
+            setNegativeButton("取消") { dialog, which -> }
+            show()
+        }
+    }
+
 }

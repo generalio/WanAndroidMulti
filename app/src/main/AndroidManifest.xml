@@ -35,6 +35,9 @@
             </intent-filter>
 
         </activity>
+
+        <activity android:name="com.generals.module.main.ui.activity.WebViewActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>
